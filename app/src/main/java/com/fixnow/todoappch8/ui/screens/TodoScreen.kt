@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
@@ -70,6 +72,19 @@ fun TodoScreen(
                 modifier = Modifier.testTag("Add_Button")
             ) {Text("add")}
         } // end Row
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ){
+            items(
+                items = viewModel.tasks,
+                key = {task -> task.id}
+                ){ task ->
+                TaskItem(
+                    task = task,
+                    onDelete = {viewModel.removeTask(task.id)}
+                )
+            }
+        }
     }
 }
 
