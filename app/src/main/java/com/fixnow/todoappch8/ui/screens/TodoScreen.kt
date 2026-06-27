@@ -69,9 +69,20 @@ fun TodoScreen(
                     viewModel.addTask(inputText)
                     inputText = ""
                 },
-                modifier = Modifier.testTag("Add_Button")
+                modifier = Modifier.testTag("add_button")
             ) {Text("add")}
         } // end Row
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        //Task counter - shows the number of task in the list
+        Text(
+            text = "${viewModel.tasks.size} task(s)",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ){
