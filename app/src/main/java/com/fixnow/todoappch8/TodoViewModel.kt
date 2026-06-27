@@ -2,6 +2,10 @@ package com.fixnow.todoappch8
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TodoViewModel  : ViewModel() {
     // _tasks is private - only this class can modify it
@@ -20,11 +24,21 @@ class TodoViewModel  : ViewModel() {
 
     fun addTask(title: String) {
         if (title.isNotBlank()) {
+
+            // viewModelScope.launch start a new coroutine in the non-blocking way
+            //Everything inside this coroutine will be executed in a separate thread
+            viewModelScope.launch{
+                withContext(Dispatchers.IO){
+                    simulatesSlowOperation() // this block the UI thread for 5 seconds
+                }
+            }
+
+
             _tasks.add(Task(id = _nextId++, title = title.trim()))
         }
     }
 
-    // Removes a task from the list by its Id
+    // Removes a task from the list by its id
     fun removeTask(taskId: Int) {
         _tasks.removeAll { it.id == taskId }
     }
@@ -38,6 +52,11 @@ class TodoViewModel  : ViewModel() {
 
     fun containsTask(title: String) : Boolean {
         return _tasks.any{ it.title == title}
+    }
+
+    //This simulates a slow operation running on the main Thread
+    private fun simulatesSlowOperation(){
+        Thread.sleep(3000)
     }
 }
 
